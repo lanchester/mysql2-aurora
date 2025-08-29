@@ -29,7 +29,9 @@ module Mysql2
         begin
           client.query(*args)
         rescue Mysql2::Error => e
-          raise e unless e.message&.include?('--read-only')
+          warn "[mysql2-aurora][ERROR] #{e.message}\n#{e.backtrace.join("\n")}"
+          warn e.message&.match?(/read[- _]?only/i)
+          raise e unless e.message&.match?(/read[- _]?only/i)
 
           try_count += 1
 
