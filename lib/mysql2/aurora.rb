@@ -29,7 +29,7 @@ module Mysql2
         begin
           client.query(*args)
         rescue Mysql2::Error => e
-          raise e unless e.message&.include?('--read-only')
+          raise e unless e.message&.match?(/read[- _]?only/i)
 
           try_count += 1
 
